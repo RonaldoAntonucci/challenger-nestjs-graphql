@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import RepoModule from './repo.module';
 import * as ormOptions from './config/orm';
 import UserResolver from './resolvers/user.resolver';
+import MessageResolver from './resolvers/message.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 
 const graphQLImports = [UserResolver];
