@@ -22,6 +22,10 @@ export class Message {
   userId: number;
 
   @Field()
+  @Column()
+  content: string;
+
+  @Field()
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
