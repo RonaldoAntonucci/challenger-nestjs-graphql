@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Message } from './Message.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
   @Field()
   @PrimaryGeneratedColumn()
