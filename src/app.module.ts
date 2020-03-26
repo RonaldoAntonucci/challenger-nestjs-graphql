@@ -9,7 +9,7 @@ import UserResolver from './resolvers/user.resolver';
 import MessageResolver from './resolvers/message.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 
-const graphQLImports = [UserResolver];
+const graphQLImports = [UserResolver, MessageResolver];
 
 @Module({
   imports: [

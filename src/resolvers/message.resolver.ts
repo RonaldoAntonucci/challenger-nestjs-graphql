@@ -3,15 +3,15 @@ import {
   Query,
   Args,
   Mutation,
-  ResolveProperty,
   Parent,
+  ResolveField,
 } from '@nestjs/graphql';
 import RepoService from 'src/repo.service';
 import { Message } from 'src/db/models/Message.entity';
-import MessageInput from './input/message.input';
+import MessageInput, { DeleteMessageInput } from './input/message.input';
 import { User } from 'src/db/models/User.entity';
 
-@Resolver()
+@Resolver(() => Message)
 class MessageResolver {
   constructor(private readonly repoService: RepoService) {}
 
@@ -42,13 +42,26 @@ class MessageResolver {
   ): Promise<Message> {
     const message = this.repoService.messageRepo.create({
       content: input.content,
-      userId: input.user.connect.id,
+      userId: input.userId,
     });
 
     return this.repoService.messageRepo.save(message);
   }
 
-  @ResolveProperty()
+  @Mutation(() => Message, { nullable: true })
+  public async deleteMessage(
+    @Args('data') input: DeleteMessageInput,
+  ): Promise<Message> {
+    const message = await this.repoService.messageRepo.findOne(input.id);
+    if (!message) {
+      return null;
+    }
+    const copy = { ...message };
+    await this.repoService.messageRepo.remove(message);
+    return copy;
+  }
+
+  @ResolveField(() => User, { name: 'user' })
   public async getUser(@Parent() parent: Message): Promise<User> {
     return this.repoService.userRepo.findOne(parent.userId);
   }
